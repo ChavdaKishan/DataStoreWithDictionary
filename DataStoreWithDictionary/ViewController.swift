@@ -40,19 +40,6 @@ class ViewController: UIViewController,UITextFieldDelegate
         }
         
         
-        // MARK: - Dictionary
-        var datainfo = Dictionary<String,String>()
-        
-        datainfo["FName"] = FNameTxt.text
-        datainfo["SName"] = SNameTxt.text
-        datainfo["Email"] = EmailTxt.text
-        datainfo["Password"] = PasswordTxt.text
-        datainfo["Phone"] = PhoneTxt.text
-        datainfo["City"] = CityTxt.text
-        
-        UserDefaults.standard.set(datainfo, forKey: "abc")
-        
-        
         //MARK: - Email ID
         if Email(emailstring: EmailTxt.text! as NSString) == false
         {
@@ -66,6 +53,19 @@ class ViewController: UIViewController,UITextFieldDelegate
         {
             AlertValidation(Title: "Password", Message: "Enter 8 To 20 Character")
         }
+        
+        
+        // MARK: - Dictionary
+        var datainfo = Dictionary<String,String>()
+        
+        datainfo["FName"] = FNameTxt.text
+        datainfo["SName"] = SNameTxt.text
+        datainfo["Email"] = EmailTxt.text
+        datainfo["Password"] = PasswordTxt.text
+        datainfo["Phone"] = PhoneTxt.text
+        datainfo["City"] = CityTxt.text
+        
+        UserDefaults.standard.set(datainfo, forKey: "abc")
         
         
         //MARK: - Segue
