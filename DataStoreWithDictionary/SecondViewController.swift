@@ -24,7 +24,8 @@ class SecondViewController: UIViewController
         
         // Do any additional setup after loading the view.
         
-        var dataset = UserDefaults.standard.value(forKey: "datainfo") as! Dictionary<String,String>
+        var dataset = UserDefaults.standard.value(forKey: "abc") as! Dictionary<String,String>
+        
         FName.text = dataset["FName"]
         SName.text = dataset["SName"]
         Email.text = dataset["Email"]
@@ -41,7 +42,6 @@ class SecondViewController: UIViewController
     
     /*
     // MARK: - Navigation
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.

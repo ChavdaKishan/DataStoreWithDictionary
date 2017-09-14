@@ -8,9 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController
+class ViewController: UIViewController,UITextFieldDelegate
 {
     
+    // MARK: - outlet
     @IBOutlet weak var FNameTxt: UITextField!
     @IBOutlet weak var SNameTxt: UITextField!
     @IBOutlet weak var EmailTxt: UITextField!
@@ -21,22 +22,25 @@ class ViewController: UIViewController
     override func viewDidLoad()
     {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // MARK: - Delegate
+        FNameTxt.delegate = self
+        SNameTxt.delegate = self
+        EmailTxt.delegate = self
+        PasswordTxt.delegate = self
+        PhoneTxt.delegate = self
+        CityTxt.delegate = self
     }
     
     @IBAction func SubmitClick(_ sender: Any)
     {
         if FNameTxt.text == "" || SNameTxt.text == "" || EmailTxt.text == "" || PasswordTxt.text == "" || PhoneTxt.text == "" || CityTxt.text == ""
         {
-            let alertValidation = UIAlertController(title: "Bio-Data", message: "Please enter all the fields", preferredStyle: UIAlertControllerStyle.alert)
-            let alertActionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
-                alertValidation.dismiss(animated: true, completion: nil)
-            })
-            alertValidation.addAction(alertActionOK)
-            self.present(alertValidation, animated: true, completion: nil)
-            return
+            AlertValidation(Title: "Student Info", Message: "Please Enter All Field")
         }
         
+        
+        // MARK: - Dictionary
         var datainfo = Dictionary<String,String>()
         
         datainfo["FName"] = FNameTxt.text
@@ -46,10 +50,114 @@ class ViewController: UIViewController
         datainfo["Phone"] = PhoneTxt.text
         datainfo["City"] = CityTxt.text
         
-        UserDefaults.standard.set(datainfo, forKey: "datainfo")
+        UserDefaults.standard.set(datainfo, forKey: "abc")
         
+        
+        //MARK: - Email ID
+        if Email(emailstring: EmailTxt.text! as NSString) == false
+        {
+            AlertValidation(Title: "Email", Message: "Enter Valid Email")
+        }
+        
+        
+        //MARK: - Password
+        let passwd : NSString = PasswordTxt.text! as NSString
+        if passwd.length < 8 || passwd.length > 20
+        {
+            AlertValidation(Title: "Password", Message: "Enter 8 To 20 Character")
+        }
+        
+        
+        //MARK: - Segue
         performSegue(withIdentifier: "Go", sender: self)
     }
+    
+    
+    //MARK: - Validation
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool
+    {
+        if textField == FNameTxt
+        {
+            let maxLan = 30
+            let name : NSString = FNameTxt.text! as NSString
+            let fullname : NSString = name.replacingCharacters(in: range, with: string) as NSString
+            
+            return fullname.length <= maxLan
+        }
+        else if textField == SNameTxt
+        {
+            let maxLan = 30
+            let name : NSString = SNameTxt.text! as NSString
+            let fullname : NSString = name.replacingCharacters(in: range, with: string) as NSString
+            
+            return fullname.length <= maxLan
+        }
+        else if textField == PasswordTxt
+        {
+            let maxLan = 20
+            let pass : NSString = PasswordTxt.text! as NSString
+            let fullpass : NSString = pass.replacingCharacters(in: range, with: string) as NSString
+            
+            return fullpass.length <= maxLan
+        }
+        else if textField == PhoneTxt
+        {
+            let phoneno = CharacterSet.decimalDigits
+            let mobile = CharacterSet(charactersIn: string)
+            
+            return phoneno.isSuperset(of: mobile)
+        }
+        else if textField == CityTxt
+        {
+            let maxLan = 20
+            let city : NSString = CityTxt.text! as NSString
+            let fullcity : NSString = city.replacingCharacters(in: range, with: string) as NSString
+            
+            return fullcity.length <= maxLan
+        }
+        else
+        {
+            return true
+        }
+    }
+    
+    
+    //MARK: Function
+    func AlertValidation(Title:String,Message:String)
+    {
+        let alertValidation = UIAlertController(title: Title, message: Message, preferredStyle: UIAlertControllerStyle.alert)
+        let alertActionOK = UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: { action in
+            alertValidation.dismiss(animated: true, completion: nil)
+        })
+        alertValidation.addAction(alertActionOK)
+        self.present(alertValidation, animated: true, completion: nil)
+        
+        /*let alertvalidation = UIAlertController(title: Title, message: Message, preferredStyle: .actionSheet)
+         let alertaction = UIAlertAction(title: "OK", style: .default, handler: {
+         action in
+         alertvalidation.dismiss(animated: true, completion: nil)
+         })
+         alertvalidation.addAction(alertaction)
+         self.present(alertvalidation,animated: true,completion: nil)
+         */
+    }
+    
+    func Email(emailstring:NSString) -> Bool
+    {
+        let EmailRegExp = "[A-Z0-9a-z./%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}"
+        let EmailValid = emailstring.range(of: EmailRegExp, options: .regularExpression)
+        let result = (EmailValid.length == 0) ? false : true
+        
+        return result
+    }
+    
+    /*
+     func textFieldShouldReturn(_ textField: UITextField) -> Bool{
+     textField.resignFirstResponder()
+     return true
+     }
+     */
+    
     override func didReceiveMemoryWarning()
     {
         super.didReceiveMemoryWarning()
