@@ -78,11 +78,18 @@ class ViewController: UIViewController,UITextFieldDelegate
     {
         if textField == FNameTxt
         {
-            let maxLan = 30
-            let name : NSString = FNameTxt.text! as NSString
-            let fullname : NSString = name.replacingCharacters(in: range, with: string) as NSString
+            if textField.text != ""
+            {
+                let maxLan = 30
+                let name : NSString = FNameTxt.text! as NSString
+                let fullname : NSString = name.replacingCharacters(in: range, with: string) as NSString
+                
+                return fullname.length <= maxLan
+            }
+            let Fnm = CharacterSet.uppercaseLetters
+            let nm = CharacterSet(charactersIn: string)
             
-            return fullname.length <= maxLan
+            return Fnm.isSuperset(of: nm)
         }
         else if textField == SNameTxt
         {
@@ -131,15 +138,6 @@ class ViewController: UIViewController,UITextFieldDelegate
         })
         alertValidation.addAction(alertActionOK)
         self.present(alertValidation, animated: true, completion: nil)
-        
-        /*let alertvalidation = UIAlertController(title: Title, message: Message, preferredStyle: .actionSheet)
-         let alertaction = UIAlertAction(title: "OK", style: .default, handler: {
-         action in
-         alertvalidation.dismiss(animated: true, completion: nil)
-         })
-         alertvalidation.addAction(alertaction)
-         self.present(alertvalidation,animated: true,completion: nil)
-         */
     }
     
     func Email(emailstring:NSString) -> Bool
